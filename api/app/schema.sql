@@ -25,9 +25,9 @@ CREATE OR REPLACE TABLE users_chats (
 );
 
 CREATE OR REPLACE TABLE messages (
+	id serial PRIMARY KEY,
 	author_id int REFERENCES users_auth (id) NOT NULL,
 	chat_id int REFERENCES chats (id)
 	content text,
-	PRIMARY KEY (author_id, chat_id)
+	PRIMARY KEY (id, chat_id)
 );
-
