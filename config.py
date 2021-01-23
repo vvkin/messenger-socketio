@@ -7,7 +7,6 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    FLASK_ENV = 'development'
 
 
 class TestingConfig(Config):
