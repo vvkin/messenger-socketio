@@ -9,9 +9,10 @@ services:
     env_file:
       - api/.env
     volumes:
-      - ./api/:/code/
+      - ./api/:/api/
     depends_on:
       - db
+        
   db:
     image: postgres:13.1
     ports:
@@ -20,7 +21,16 @@ services:
       - .env-postgres
     restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data 
+
+  client:
+    build: client/
+    command: npm start
+    ports:
+      - 3000:3000
+    stdin_open: true
+    volumes:
+      - ./client/:/client/
 
 volumes:
   postgres_data:

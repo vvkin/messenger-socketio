@@ -4,11 +4,11 @@ ENV FLASK_APP api/messenger.py
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYHONUNBUFFERED 1
 
-WORKDIR /code/
+WORKDIR /api/
 
-COPY Pipfile Pipfile.lock /code/
+COPY Pipfile Pipfile.lock /api/
 RUN pip install pipenv && pipenv install --system
 
-COPY . /code/
+COPY . /api/
 
 EXPOSE 5000
