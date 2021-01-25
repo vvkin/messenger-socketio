@@ -1,13 +1,6 @@
-# python cache
-**__pycache__**
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# env files
-.env*
-
-# js eslint cache
-.eslintcache
-
-# react dependencies
+# dependencies
 /node_modules
 /.pnp
 .pnp.js
@@ -24,6 +17,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
