@@ -15,11 +15,8 @@ services:
         
   db:
     image: postgres:13.1
-    ports:
-      - 5433:5432
     env_file:
       - .env-postgres
-    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data 
 

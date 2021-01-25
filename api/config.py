@@ -7,6 +7,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    DATABASE = os.environ.get('DEV_DATABASE')
 
 
 class TestingConfig(Config):
