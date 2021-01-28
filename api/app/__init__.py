@@ -18,5 +18,7 @@ def create_app(config_name: str) -> Flask:
 
     from app.main import main
     app.register_blueprint(main)
+    from app.auth import auth
+    app.register_blueprint(auth)
 
     return app
