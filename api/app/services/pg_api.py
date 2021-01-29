@@ -1,5 +1,5 @@
 from app.services.db import get_db
-from psycopg2 import DictCursor
+from psycopg2.extras import DictCursor
 
 
 class QuerySet:

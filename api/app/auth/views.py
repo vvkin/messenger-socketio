@@ -12,8 +12,8 @@ def load_user(user_id: str) -> User:
 
 @auth.route('/register/', methods=['POST'])
 def register():
-    data = request.json
-    if User.is_valid(data):
+    data = request.get_json()
+    if User.is_valid(data['username'], data['email']):
         user = User.from_json(data)
         user.insert()
         return user.get_json(), 201
@@ -22,9 +22,9 @@ def register():
 
 @auth.route('/login/', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json()
     user = User.get(data['login'])
-    if user.check_password(data['password']):
+    if user and user.check_password(data['password']):
         login_user(user, remember=data['remember'])
         return user.get_json(), 200
     else: return 'Invalid credentials', 401

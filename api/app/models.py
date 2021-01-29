@@ -30,6 +30,13 @@ class User(UserMixin):
     def from_json(cls: Type[T], data: dict[str, str]) -> T:
         return cls(**data)
 
+    @staticmethod
+    def is_valid(username: str, email: str) -> bool:
+        return not (
+            username and User.get(username) or
+            email and User.get(email)
+        )
+
     def set_password(self, password: str) -> None:
         self.password = generate_password_hash(password)
 
