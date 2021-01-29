@@ -1,6 +1,6 @@
 from app.services.pg_api import PgAPI
 from flask_login import UserMixin
-from typing import Type, TypeVar
+from typing import Type, TypeVar, Union
 from werkzeug.security import generate_password_hash, check_password_hash
 
 T = TypeVar('T', bound='User')
@@ -20,11 +20,15 @@ class User(UserMixin):
         return self.username or self.email
 
     @classmethod
-    def get(cls: Type[T], id: str) -> T:
+    def get(cls: Type[T], id: str) -> Union[T, None]:
         field = 'email' if '@' in id else 'username'
-        query = 'SELECT * FROM user WHERE %s=%s'
-        query_set = PgAPI.execute_query(query, field, id)
-        return cls(*query_set.one()[1:])
+        query = 'SELECT * FROM users WHERE %s=%s'
+        user = PgAPI.execute_query(query, field, id).one()
+        return cls(*user[1:]) if user else None
+
+    @classmethod
+    def from_json(cls: Type[T], data: dict[str, str]) -> T:
+        return cls(**data)
 
     def set_password(self, password: str) -> None:
         self.password = generate_password_hash(password)
@@ -40,10 +44,10 @@ class User(UserMixin):
             'status': self.status
         }
 
-    def save(self) -> None:
+    def update(self) -> None:
         # TODO: Update user in DB
         pass
 
-    def create(self) -> None:
+    def insert(self) -> None:
         # TODO: Insert new user to DB
         pass
