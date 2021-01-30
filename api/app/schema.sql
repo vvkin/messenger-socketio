@@ -1,10 +1,10 @@
 CREATE TABLE users (
 	user_id serial PRIMARY KEY,
-	email varchar(255) UNIQUE,
-	username varchar(32) UNIQUE NOT NULL,
 	name varchar(128) NOT NULL,
+	username varchar(32) UNIQUE NOT NULL,
+	email varchar(255) UNIQUE,
 	status varchar(128),
-	password varchar(128) NOT NULL
+	password varchar(255) NOT NULL
 );
 
 CREATE TABLE chats (

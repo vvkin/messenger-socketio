@@ -25,7 +25,7 @@ def login():
     data = request.get_json()
     user = User.get(data['login'])
     if user and user.check_password(data['password']):
-        login_user(user, remember=data['remember'])
+        login_user(user)
         return user.get_json(), 200
     else: return 'Invalid credentials', 401
 
