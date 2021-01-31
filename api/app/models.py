@@ -7,8 +7,9 @@ T = TypeVar('T', bound='User')
 
 
 class User(UserMixin):
-    def __init__(self, name: str, username: str, email: str,
-                 status: str, password: str) -> None:
+    def __init__(self, user_id: Union[int, None], name: str, username: str,
+                 email: str, status: str, password: str) -> None:
+        self.user_id = user_id
         self.name = name
         self.username = username
         self.email = email
@@ -24,10 +25,11 @@ class User(UserMixin):
         field = 'email' if '@' in user_id else 'username'
         query = f'SELECT * FROM users WHERE {field} = %s'
         user = PgAPI.execute_query(query, user_id).one()
-        return cls(*user[1:]) if user else None
+        return cls(*user) if user else None
 
     @classmethod
     def from_json(cls: Type[T], data: dict[str, str]) -> T:
+        data['user_id'] = None
         data['password'] = generate_password_hash(data['password'])
         return cls(**data)
 
@@ -49,15 +51,20 @@ class User(UserMixin):
             'status': self.status
         }
 
+    def get_chats(self) -> list[str]:
+        query = 'SELECT * FROM get_user_chats(%s)'
+        query_set = PgAPI.execute_query(query, self.user_id)
+        return query_set.all()
+
     def update(self) -> None:
         # TODO: Update user in DB
         pass
 
     def insert(self) -> None:
-        fields = self.__dict__.keys()
         query = (
             'INSERT INTO users'
-            f'({",".join(fields)})'
-            f'VALUES ({"%s," * (len(fields) - 1)}%s)'
+            '(name, username, email, status, password)'
+            'VALUES (%s, %s, %s, %s, %s)'
         )
-        PgAPI.execute_call(query, *self.__dict__.values())
+        values = [*self.__dict__.values()][1:]  # exclude id
+        PgAPI.execute_call(query, *values)

@@ -4,7 +4,7 @@ CREATE TABLE users (
 	username varchar(32) UNIQUE NOT NULL,
 	email varchar(255) UNIQUE,
 	status varchar(128),
-	password varchar(255) NOT NULL
+	password varchar(128) NOT NULL
 );
 
 CREATE TABLE chats (
@@ -26,3 +26,16 @@ CREATE TABLE messages (
 	content text,
 	PRIMARY KEY (chat_id, msg_id)
 );
+
+-- FUNCTIONS
+CREATE OR REPLACE FUNCTION get_user_chats(user_id int)
+RETURNS SETOF varchar(128) AS $$
+	SELECT c.tag
+	FROM chats c
+	WHERE EXISTS (
+		SELECT 1
+		FROM users_chats uc
+		WHERE uc.user_id = user_id
+		    AND uc.chat_id = c.chat_id
+	)
+$$ LANGUAGE SQL;

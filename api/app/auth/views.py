@@ -2,7 +2,7 @@ from app import login_manager
 from app.auth import auth
 from app.models import User
 from flask import request
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 
 @login_manager.user_loader
@@ -32,4 +32,7 @@ def login():
 
 @auth.route('/logout/', methods=['POST'])
 def logout():
-    logout_user()
+    if current_user.is_authenticated:
+        logout_user()
+        return 'Logged out', 200
+    else: return 'There are no logged in users!', 401
