@@ -16,8 +16,8 @@ def register():
     if User.is_valid(data['username'], data['email']):
         user = User.from_json(data)
         user.insert()
-        return user.get_json(), 201
-    else: return 'Invalid credentials', 400
+        return {'user': user.get_json()}, 201
+    else: return {'error': 'Invalid credentials'}, 400
 
 
 @auth.route('/login/', methods=['POST'])
@@ -26,13 +26,20 @@ def login():
     user = User.get(data['login'])
     if user and user.check_password(data['password']):
         login_user(user)
-        return user.get_json(), 200
-    else: return 'Invalid credentials', 401
+        return {'user': user.get_json()}, 200
+    else: return {'error': 'Invalid credentials'}, 401
 
 
 @auth.route('/logout/', methods=['POST'])
 def logout():
     if current_user.is_authenticated:
         logout_user()
-        return 'Logged out', 200
-    else: return 'There are no logged in users!', 401
+        return {'success': 'Logged out'}, 200
+    else: return {'error': 'Authentication required'}, 401
+
+
+@auth.route('/get-user/', methods=['POST'])
+def get_user():
+    if current_user.is_authenticated:
+        return {'user': current_user.get_json()}, 200
+    else: return {'error': 'Authentication required'}, 400

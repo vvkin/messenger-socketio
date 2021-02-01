@@ -36,8 +36,8 @@ class User(UserMixin):
     @staticmethod
     def is_valid(username: str, email: str) -> bool:
         return not (
-            username and User.get(username) or
-            email and User.get(email)
+            username and User.get(username)
+            or email and User.get(email)
         )
 
     def check_password(self, password: str) -> bool:
