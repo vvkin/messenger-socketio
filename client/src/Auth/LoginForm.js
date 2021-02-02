@@ -29,22 +29,24 @@ export default function LoginForm() {
   }
 
   function validateForm() {
-    return login.length > 0 && password.length > 0;
+    return (login.length && password.length);
   }
 
   return (
     <div className='login'>
-      <form onSubmit={handleSubmit}>
+      <form method='POST' onSubmit={handleSubmit}>
         <input
           type='text'
           value={login}
           placeholder='Username or email'
+          maxlength='255'
           onChange={(e) => setLogin(e.target.value)}
         />
         <input 
           type='password' 
           value={password} 
           placeholder='Password'
+          maxlength='30'
           onChange={(e) => setPassword(e.target.value)} 
         />
         <button disabled={!validateForm()}>Login</button>

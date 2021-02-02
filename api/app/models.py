@@ -1,7 +1,7 @@
-from app.services.pg_api import PgAPI
-from flask_login import UserMixin
 from typing import Type, TypeVar, Union
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.services.pg_api import PgAPI
 
 T = TypeVar('T', bound='User')
 
@@ -29,16 +29,26 @@ class User(UserMixin):
 
     @classmethod
     def from_json(cls: Type[T], data: dict[str, str]) -> T:
-        data['user_id'] = None
-        data['password'] = generate_password_hash(data['password'])
-        return cls(**data)
+        return cls(
+            user_id=data.get('user_id', None),
+            name=data.get('name', ''),
+            username=data.get('username', ''),
+            email=data.get('email', ''),
+            status=data.get('status', ''),
+            password=generate_password_hash(data.get('password', ''))
+        )
 
     @staticmethod
-    def is_valid(username: str, email: str) -> bool:
-        return not (
-            username and User.get(username)
-            or email and User.get(email)
-        )
+    def is_valid(data: dict[str, str]) -> bool:
+        username, email = data['username'], data['email']
+        if username or email:
+            return not (
+                username and User.get(username)
+                or email and User.get(email)
+                or len(data['name']) > 128
+                or len(data['password']) > 30
+            )
+        else: return False
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

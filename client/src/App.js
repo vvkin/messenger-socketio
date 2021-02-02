@@ -1,8 +1,9 @@
-import LoginForm from './Auth/LoginForm.js'
+import LoginForm from './Auth/LoginForm.js';
+import RegisterForm from './Auth/RegisterForm.js';
 
 function App() {
   return (
-    <LoginForm /> 
+    <RegisterForm /> 
   );
 }
 

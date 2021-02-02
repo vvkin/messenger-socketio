@@ -1,8 +1,8 @@
+from flask import request
+from flask_login import login_user, logout_user, current_user
 from app import login_manager
 from app.auth import auth
 from app.models import User
-from flask import request
-from flask_login import login_user, logout_user, current_user
 
 
 @login_manager.user_loader
@@ -12,9 +12,9 @@ def load_user(user_id: str) -> User:
 
 @auth.route('/register/', methods=['POST'])
 def register():
-    data = request.get_json()
-    if User.is_valid(data['username'], data['email']):
-        user = User.from_json(data)
+    user_data = request.get_json()
+    if User.is_valid(user_data):
+        user = User.from_json(user_data)
         user.insert()
         return {'user': user.get_json()}, 201
     else: return {'error': 'Invalid credentials'}, 400
