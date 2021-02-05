@@ -6,7 +6,7 @@ from app.services import db
 from config import config
 
 
-cors = CORS(resources={'/*': {'origins': 'http://localhost:3000'}})
+cors = CORS(resources={'/*': {'origins': 'http://localhost:3000'}}, supports_credentials=True)
 sio = SocketIO()
 login_manager = LoginManager()
 

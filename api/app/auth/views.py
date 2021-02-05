@@ -25,7 +25,7 @@ def login():
     data = request.get_json()
     user = User.get(data['login'])
     if user and user.check_password(data['password']):
-        login_user(user)
+        login_user(user, remember=False)
         return {'user': user.get_json()}, 200
     else: return {'error': 'Invalid credentials'}, 401
 
@@ -38,7 +38,7 @@ def logout():
     else: return {'error': 'Authentication required'}, 401
 
 
-@auth.route('/get-user/', methods=['POST'])
+@auth.route('/get-user/', methods=['GET'])
 def get_user():
     if current_user.is_authenticated:
         return {'user': current_user.get_json()}, 200

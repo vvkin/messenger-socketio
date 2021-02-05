@@ -1,18 +1,22 @@
-import useUser from './useStorage';
+import { useState, useEffect } from 'react';
 import LoginForm from '../Auth/LoginForm';
+import Chat from '../Chat/Chat';
 
-function App() {
-  const [user, setUser] = useUser(null);
+const App = () => {
+    const baseUrl = 'http://localhost:5000';
+    const [user, setUser] = useState(null);
 
-  if (!user) {
-    return <LoginForm baseUrl = 'http://localhost:5000' setUser = {setUser}/>
-  }
+    useEffect(() => {
+        fetch(`${baseUrl}/get-user/`)
+            .then(res => res.ok ? res.json() : null)
+            .then(userData => setUser(userData))
+    }, []);
 
-  return (
-    <h1>
-     {JSON.stringify(user)}
-    </h1>
-  )
+    if (!user) {
+        return <LoginForm baseUrl={baseUrl} setUser={setUser} />
+    } else {
+        return <Chat user={user} />
+    }
 }
 
 export default App;

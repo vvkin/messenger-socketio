@@ -21,11 +21,10 @@ const LoginForm = ({ baseUrl, setUser }) => {
     });
 
     if (response.ok) {
-      response.json().then(
-        user => setUser(user)
-      );
+      const userData = await response.json();
+      setUser(userData);
     } else {
-      console.log('oops');
+      showError();
     }
   }
 
