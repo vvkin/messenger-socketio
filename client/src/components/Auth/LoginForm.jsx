@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './styles.css'
 
-const LoginForm = ({ baseUrl }) => {
+const LoginForm = ({ baseUrl, setUser }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,12 +20,21 @@ const LoginForm = ({ baseUrl }) => {
       body: JSON.stringify(credentials)
     });
 
-    const serverResult = await response.json();
-    console.log(serverResult);
+    if (response.ok) {
+      response.json().then(
+        user => setUser(user)
+      );
+    } else {
+      console.log('oops');
+    }
   }
 
   const validateForm  = () => {
     return (login.length && password.length)
+  }
+
+  const showError = () => {
+    console.log('Incorrect login or password');
   }
 
   return (
