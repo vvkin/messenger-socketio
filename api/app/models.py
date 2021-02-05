@@ -45,8 +45,6 @@ class User(UserMixin):
             return not (
                 username and User.get(username)
                 or email and User.get(email)
-                or len(data['name']) > 128
-                or len(data['password']) > 30
             )
         else: return False
 

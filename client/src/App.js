@@ -1,9 +1,9 @@
-import LoginForm from './Auth/LoginForm.js';
-import RegisterForm from './Auth/RegisterForm.js';
+import LoginForm from './components/auth/login-form';
+import RegisterForm from './components/auth/register-form'
 
 function App() {
   return (
-    <RegisterForm /> 
+    <RegisterForm baseUrl = 'http://localhost:5000' />
   );
 }
 

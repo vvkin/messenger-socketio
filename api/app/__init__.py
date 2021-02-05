@@ -14,15 +14,15 @@ login_manager = LoginManager()
 def create_app(config_name: str) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    
+
     cors.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     sio.init_app(app)
-    
+
     from app.auth import auth
     app.register_blueprint(auth)
     from app.main import main
     app.register_blueprint(main)
-    
+
     return app

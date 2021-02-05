@@ -1,0 +1,80 @@
+.login-wrapper {
+    width: 320px;
+    margin: 0 auto;
+}
+
+.register-wrapper {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.form-header {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-header h1 {
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.form-body {
+    background-color: #eee;
+    border-radius: 5px;
+    margin-top: 16px;
+    padding: 20px;
+}
+
+.form-body input {
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 5px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+.form-body button {
+    width: 100%;
+    margin-top: 7px;
+    padding: 5px 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #24a0ed;
+    line-height: 20px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.form-body button:hover {
+    background-color: #1183ca;
+    transition-duration: .1s;
+}
+
+.form-body label {
+    font-weight: 600;
+    text-align: left;
+}
+
+.form-body label a {
+    font-size: 12px;
+    font-weight: 600;
+    float: right;
+}
+
+a {
+    text-decoration: none;
+    color: #0366d6;
+}
+
+.register-wrapper .form-body label::after {
+    padding-left: 5px;
+    color: #FF0000;
+    content: "*";
+}
