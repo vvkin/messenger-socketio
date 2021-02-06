@@ -7,9 +7,9 @@ const App = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch(`${baseUrl}/get-user/`)
+        fetch(`${baseUrl}/get-user/`, {credentials: 'include'})
             .then(res => res.ok ? res.json() : null)
-            .then(userData => setUser(userData))
+            .then(data => setUser(data.user));
     }, []);
 
     if (!user) {

@@ -5,35 +5,30 @@ const LoginForm = ({ baseUrl, setUser }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const apiUrl = baseUrl + '/login/';
-    const credentials = {
-      'login': login,
-      'password': password
-    };
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(credentials)
-    });
 
-    if (response.ok) {
-      const userData = await response.json();
-      setUser(userData);
-    } else {
-      showError();
-    }
+    fetch(`${baseUrl}/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          'login': login,
+          'password': password
+        })
+    }).then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(data => setUser(data.user))
+      .catch(res => res.json().then(data => showError(data.error)))
   }
 
   const validateForm  = () => {
-    return (login.length && password.length)
+    return (login.length && password.length);
   }
 
-  const showError = () => {
-    console.log('Incorrect login or password');
+  const showError = error => {
+    console.log(error);
   }
 
   return (
@@ -52,7 +47,7 @@ const LoginForm = ({ baseUrl, setUser }) => {
                  onChange={(e) => setLogin(e.target.value)} />
           <label htmlFor='password_field'>
             Password
-            <a href='#'>Forgot password?</a>
+            <a href='/'>Forgot password?</a>
           </label>
           <input id='password_field'
                  type='password'
@@ -66,4 +61,4 @@ const LoginForm = ({ baseUrl, setUser }) => {
   )
 }
 
-export default LoginForm
+export default LoginForm;
