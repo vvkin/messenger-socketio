@@ -1,9 +1,9 @@
 from flask_login import current_user
 from flask_socketio import join_room, ConnectionRefusedError
-from app import sio
+from app import socketio
 
 
-@sio.event
+@socketio.event
 def connect():
     if current_user.is_authenticated:
         chats = current_user.get_chats()
@@ -12,6 +12,6 @@ def connect():
     else: return ConnectionRefusedError('Unauthorized!')
 
 
-@sio.event
+@socketio.event
 def disconnect():
     pass

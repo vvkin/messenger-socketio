@@ -1,37 +1,33 @@
-import React, { useState } from 'react'
-import './styles.css'
+import React, { useState } from 'react';
+import fetchApi from './fetchApi';
+import './styles.css';
 
 const RegisterForm  = ({ baseUrl }) => {
   const [name, setName] = useState('');
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const apiUrl = baseUrl + '/register/';
-    const userData = {
+
+    const response = await fetchApi(`${baseUrl}/register/`, {
       'name': name,
       'username': username,
       'email': email,
       'password': password
-    }
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userData) 
     });
-
-    const serverResult = await response.json();
-    console.log(serverResult);
+    const data = await response.json();
+    response.ok ? console.log('OK') : showError(data.error);
   }
 
   const validateForm = () => {
-    return (password === confirmPassword);
+    return (username.length);
   }
+  
+  const showError = error => {
+    console.log(error);
+  };
 
   return (
     <div className='register-wrapper'>
@@ -71,14 +67,6 @@ const RegisterForm  = ({ baseUrl }) => {
                 required
                 onChange={(e) => setPassword(e.target.value)}
           />
-          <label htmlFor="passwd_confirm_field">Confirm password</label>
-          <input id='passwd_confirm_field'
-                type='password'
-                value={confirmPassword}
-                maxlength='30'
-                required
-                onChange={(e) => setConfirmPassword(e.target.value)}
-          />
           <button disabled={!validateForm()}>Sign up</button>        
         </form>
       </div>
@@ -86,4 +74,4 @@ const RegisterForm  = ({ baseUrl }) => {
   )
 }
 
-export default RegisterForm
+export default RegisterForm;

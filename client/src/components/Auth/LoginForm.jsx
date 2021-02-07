@@ -1,34 +1,25 @@
-import React, { useState } from 'react'
-import './styles.css'
+import React, { useState } from 'react';
+import fetchApi from './fetchApi';
+import './styles.css';
 
 const LoginForm = ({ baseUrl, setUser }) => {
+  const [error, setError] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
-    fetch(`${baseUrl}/login/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          'login': login,
-          'password': password
-        })
-    }).then(res => res.ok ? res.json() : Promise.reject(res))
-      .then(data => setUser(data.user))
-      .catch(res => res.json().then(data => showError(data.error)))
+    const response = await fetchApi(`${baseUrl}/login/`, {
+      'login': login,
+      'password': password
+    });
+    const data = await response.json();
+    response.ok ? setUser(data.user) : setError(data.error);
   }
 
   const validateForm  = () => {
     return (login.length && password.length);
-  }
-
-  const showError = error => {
-    console.log(error);
   }
 
   return (
@@ -36,7 +27,9 @@ const LoginForm = ({ baseUrl, setUser }) => {
       <div className='form-header'>
         <h1>Sign in to Messenger</h1>
       </div>
-      <div className='form-error' />
+      {error ? (
+        <div className='form-error'>{error}</div>
+      ): null}
       <div className='form-body'>
         <form onSubmit={handleSubmit}>
           <label htmlFor='login_field'>Username or email address</label>

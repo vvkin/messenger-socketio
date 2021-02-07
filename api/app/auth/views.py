@@ -27,7 +27,7 @@ def login():
     if user and user.check_password(data['password']):
         login_user(user, remember=False)
         return {'user': user.get_json()}, 200
-    else: return {'error': 'Invalid credentials'}, 401
+    else: return {'error': 'Incorrect login or password'}, 401
 
 
 @auth.route('/logout/', methods=['POST'])
