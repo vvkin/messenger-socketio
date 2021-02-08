@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
-import fetchApi from './fetchApi';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../helpers/use-auth';
 import './styles.css';
 
-const LoginForm = ({ baseUrl, setUser }) => {
+const LoginForm = props => {
+  const auth = useAuth();
   const [error, setError] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async event => {
+  const handleSubmit = event => {
     event.preventDefault();
 
-    const response = await fetchApi(`${baseUrl}/login/`, {
-      'login': login,
-      'password': password
-    });
-    const data = await response.json();
-    response.ok ? setUser(data.user) : setError(data.error);
+    auth.login({ login, password })
+      .then(() => props.history.push('/'))
+      .catch(response => {
+        response.json().then(({ error }) => {
+          setError(error)
+        })
+      })
   }
 
   const validateForm  = () => {
@@ -49,6 +52,9 @@ const LoginForm = ({ baseUrl, setUser }) => {
                  onChange={(e) => setPassword(e.target.value)} />
           <button disabled={!validateForm()}>Sign in</button>
         </form>
+      </div>
+      <div className="redirect">
+        <Link to='/register'>Sign up</Link>
       </div>
     </div>
   )
